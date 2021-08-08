@@ -3,7 +3,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   
   def index
-    @tasks = Task.all
+    @pagy, @tasks = pagy(current_user.tasks)
   end
   
   def show
@@ -18,7 +18,7 @@ class TasksController < ApplicationController
     
     if @task.save
       flash[:succes] = 'Task が正常に投稿されました'
-      redirect_to root_url
+      redirect_to @task
     else
       @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
       flash.now[:denger] = 'Task が投稿されませんでした'
